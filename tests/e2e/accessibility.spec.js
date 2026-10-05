@@ -6,6 +6,7 @@
 // regression gate: it fails only when a NEW serious/critical rule shows up.
 const { test, expect } = require('../../fixtures');
 const baseline = require('../../test-data/a11y-baseline.json');
+const { BasePage } = require('../../pages/BasePage');
 
 const PAGES = [
   { name: 'homepage', path: '/' },
@@ -16,7 +17,10 @@ const PAGES = [
 test.describe('Accessibility', { tag: ['@regression', '@a11y'] }, () => {
   for (const { name, path } of PAGES) {
     test(`${name} has no new serious or critical violations`, async ({ page, makeAxeBuilder }, testInfo) => {
-      await page.goto(path);
+      // Navigate through the page object, NOT page.goto(): BasePage.goto() skips the test
+      // when Cloudflare serves its bot challenge. The first CI run used page.goto() and
+      // axe ended up scanning the challenge page instead of Product Hunt.
+      await new BasePage(page).goto(path);
       await page.getByRole('main').waitFor();
 
       const { violations } = await makeAxeBuilder().analyze();
