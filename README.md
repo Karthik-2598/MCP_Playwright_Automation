@@ -1,8 +1,8 @@
 # Playwright + MCP QA Framework
 
-[![Playwright Tests](https://github.com/Karthik-2598/playwright-mcp-qa-framework/actions/workflows/playwright.yml/badge.svg)](https://github.com/Karthik-2598/playwright-mcp-qa-framework/actions/workflows/playwright.yml)
+[![Playwright Tests](https://github.com/Karthik-2598/MCP_Playwright_Automation/actions/workflows/playwright.yml/badge.svg)](https://github.com/Karthik-2598/MCP_Playwright_Automation/actions/workflows/playwright.yml)
 
-**Latest test report:** https://karthik-2598.github.io/playwright-mcp-qa-framework/
+**Latest test report:** https://karthik-2598.github.io/MCP_Playwright_Automation/
 
 E2E and GraphQL API test suites for [Product Hunt](https://www.producthunt.com), built with Playwright Test in JavaScript, with MCP-driven test authoring and triage (in progress).
 
