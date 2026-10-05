@@ -1,0 +1,27 @@
+{
+  "$id": "viewer-response",
+  "title": "viewer query: successful response",
+  "type": "object",
+  "required": ["data"],
+  "properties": {
+    "errors": { "not": {} },
+    "data": {
+      "type": "object",
+      "required": ["viewer"],
+      "properties": {
+        "viewer": {
+          "type": "object",
+          "required": ["user"],
+          "properties": {
+            "user": {
+              "type": "object",
+              "required": ["id"],
+              "additionalProperties": false,
+              "properties": { "id": { "type": "string", "minLength": 1 } }
+            }
+          }
+        }
+      }
+    }
+  }
+}

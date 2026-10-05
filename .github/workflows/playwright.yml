@@ -1,0 +1,133 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Every day at 08:00 IST (02:30 UTC). The site under test is live, so a nightly
+    # run catches Product Hunt changes even on days nobody pushes code.
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+    inputs:
+      grep:
+        description: 'Only run tests matching this tag, e.g. @smoke (empty = everything)'
+        required: false
+        default: ''
+
+# A newer push to the same branch cancels the older, now-pointless run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GREP: ${{ inputs.grep }}
+
+jobs:
+  api:
+    name: API tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # No browser install: API tests only use Playwright's request context.
+      - name: Run API tests
+        env:
+          PH_DEV_TOKEN: ${{ secrets.PH_DEV_TOKEN }}
+          BLOB_NAME: api
+        run: npx playwright test --project=api ${GREP:+--grep "$GREP"}
+      - name: Upload blob report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: blob-report-api
+          path: blob-report
+          retention-days: 1
+
+  e2e:
+    name: E2E tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      # Let every shard finish even if one fails, so the report is complete.
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2]
+        shardTotal: [2]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run E2E tests
+        env:
+          BLOB_NAME: e2e-${{ matrix.shardIndex }}
+        run: >-
+          npx playwright test --project=e2e
+          --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+          ${GREP:+--grep "$GREP"}
+      - name: Upload blob report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: blob-report-e2e-${{ matrix.shardIndex }}
+          path: blob-report
+          retention-days: 1
+
+  report:
+    name: Merge reports
+    # Run even when tests failed: a failing run is exactly when you need the report.
+    if: ${{ !cancelled() }}
+    needs: [api, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Download all blob reports
+        uses: actions/download-artifact@v8
+        with:
+          pattern: blob-report-*
+          path: all-blob-reports
+          merge-multiple: true
+      - name: Merge into one HTML report
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 14
+      - name: Prepare report for GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: playwright-report
+
+  deploy-report:
+    name: Publish report to GitHub Pages
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.report.result == 'success' }}
+    needs: report
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

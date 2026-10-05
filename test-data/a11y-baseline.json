@@ -1,0 +1,6 @@
+{
+  "_about": "Known WCAG 2.1 A/AA violations on the live site, recorded with axe-core on 2026-10-04. Tests fail only on violations NOT listed here. When a listed rule stops failing, the test annotates it so you can remove it and tighten the gate.",
+  "homepage": ["color-contrast", "link-name"],
+  "category page": ["aria-hidden-focus", "button-name", "color-contrast", "link-name", "nested-interactive"],
+  "search results": ["color-contrast", "link-name"]
+}

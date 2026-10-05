@@ -1,0 +1,54 @@
+{
+  "$id": "posts-response",
+  "title": "posts query: successful response",
+  "type": "object",
+  "required": ["data"],
+  "properties": {
+    "errors": { "not": {} },
+    "data": {
+      "type": "object",
+      "required": ["posts"],
+      "properties": {
+        "posts": {
+          "type": "object",
+          "required": ["totalCount", "pageInfo", "edges"],
+          "additionalProperties": false,
+          "properties": {
+            "totalCount": { "type": "integer", "minimum": 0 },
+            "pageInfo": {
+              "type": "object",
+              "required": ["hasNextPage", "endCursor"],
+              "additionalProperties": false,
+              "properties": {
+                "hasNextPage": { "type": "boolean" },
+                "endCursor": { "type": ["string", "null"] }
+              }
+            },
+            "edges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["cursor", "node"],
+                "additionalProperties": false,
+                "properties": {
+                  "cursor": { "type": "string", "minLength": 1 },
+                  "node": {
+                    "type": "object",
+                    "required": ["id", "name", "votesCount", "createdAt"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": { "type": "string", "minLength": 1 },
+                      "name": { "type": "string", "minLength": 1 },
+                      "votesCount": { "type": "integer", "minimum": 0 },
+                      "createdAt": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

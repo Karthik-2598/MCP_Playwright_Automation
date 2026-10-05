@@ -1,0 +1,24 @@
+{
+  "data": {
+    "search": {
+      "edges": [
+        {
+          "node": {
+            "id": "999001",
+            "name": "Mocked QA Product",
+            "tagline": "Only exists inside this test",
+            "slug": "mocked-qa-product",
+            "reviewsRating": 4.5,
+            "reviewsCount": 12,
+            "logoUuid": "ff3e2acf-884a-4f4c-a383-6edfe3de0d88.png",
+            "isNoLongerOnline": false,
+            "__typename": "Product"
+          },
+          "__typename": "SearchableUnionEdge"
+        }
+      ],
+      "__typename": "SearchConnection"
+    },
+    "discussions": { "edges": [], "__typename": "DiscussionThreadConnection" }
+  }
+}

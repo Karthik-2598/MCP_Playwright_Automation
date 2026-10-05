@@ -1,0 +1,6 @@
+{
+  "data": {
+    "search": { "edges": [], "__typename": "SearchConnection" },
+    "discussions": { "edges": [], "__typename": "DiscussionThreadConnection" }
+  }
+}
