@@ -47,5 +47,5 @@ Tick every box before committing. Each one maps to a real mistake in this projec
 ## Sessions
 
 | Date | Feature | Outcome | Log |
-|---|---|---|---|
+|08-10-2026|Leaderboard(identified by MCP)|Sucess|---|
 | | | | |
