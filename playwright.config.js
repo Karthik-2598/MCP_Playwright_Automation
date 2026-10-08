@@ -46,6 +46,7 @@ module.exports = defineConfig({
         baseURL: 'https://www.producthunt.com',
         // Lets page objects use getByTestId('x') for elements marked data-test="x".
         testIdAttribute: 'data-test',
+        locale: 'en-US',
       },
     },
   ],

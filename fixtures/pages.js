@@ -5,6 +5,7 @@ const { HomePage } = require('../pages/HomePage');
 const { ProductPage } = require('../pages/ProductPage');
 const { TopicPage } = require('../pages/TopicPage');
 const { SearchResultsPage } = require('../pages/SearchResultsPage');
+const { LeaderboardPage } = require('../pages/LeaderboardPage');
 const { mockGraphQLOperation } = require('./network');
 const { default: AxeBuilder } = require('@axe-core/playwright');
 
@@ -38,6 +39,9 @@ const test = base.test.extend({
   },
   searchResultsPage: async ({ page }, use) => {
     await use(new SearchResultsPage(page));
+  },
+  leaderboardPage: async ({ page }, use) => {
+    await use(new LeaderboardPage(page));
   },
 
   // mockGraphQL('SpotlightSearchQuery', handler): intercept one frontend GraphQL operation.

@@ -6,3 +6,4 @@ blob-report/
 results/
 playwright/.cache/
 *.log
+mcp-output/

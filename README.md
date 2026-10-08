@@ -44,6 +44,9 @@ pages/
   BasePage.js           Common page bits; specific pages extend it
   HomePage.js  ProductPage.js  TopicPage.js  SearchResultsPage.js
 graphql/queries.js    GraphQL documents shared across tests
+prompts/              Reusable prompts for AI-assisted exploration
+docs/mcp-sessions/    MCP review checklist and session logs
+AGENTS.md             Framework rules for AI agents (CLAUDE.md points here)
 schemas/              JSON Schemas for API response contracts
 test-data/            Category rows, mock responses, accessibility baseline
 tests/api/            API tests (project: api)
@@ -75,6 +78,15 @@ tests/e2e/            Browser tests (project: e2e)
 - **Run a subset by hand:** Actions → Playwright Tests → Run workflow → `grep: @smoke`.
 
 **One-time setup:** add the `PH_DEV_TOKEN` repository secret (Settings → Secrets and variables → Actions) and set Settings → Pages → Source to **GitHub Actions**.
+
+## AI-assisted exploration (Playwright MCP)
+
+[Playwright MCP](https://github.com/microsoft/playwright-mcp) lets an AI assistant drive a real browser through tools, reading the page's accessibility tree. Here it is used as a **research assistant**: the AI explores Product Hunt and drafts tests, a human reviews and owns what gets committed.
+
+- **Server config is in the repo:** `.mcp.json` (Claude Code) and `.vscode/mcp.json` (VS Code). Pinned version, Chrome, `--test-id-attribute data-test` to match the site, `--caps testing` for locator and assertion tools.
+- **`AGENTS.md`** gives any AI agent the framework's rules (fixtures, page objects, locator priority, tags, never bypass Cloudflare), so drafts fit the codebase.
+- **`prompts/explore-feature.md`** is a reusable 3-phase prompt: explore, propose test ideas, draft.
+- **`docs/mcp-sessions/`** holds the review checklist and one log per session, including what the AI got wrong and how it was fixed.
 
 ## Roadmap
 
