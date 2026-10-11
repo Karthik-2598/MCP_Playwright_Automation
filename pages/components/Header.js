@@ -19,10 +19,11 @@ class Header {
     // exact: true so it never matches a menu item such as "Launch archive ...".
     this.launchesLink = this.mainNav.getByRole('link', { name: 'Launches', exact: true });
 
-    // Items in the Launches hover menu. Their accessible names include the subtitle
-    // ("Launch archive Most-loved launches by the community"), hence the prefix match.
-    this.launchArchiveLink = this.mainNav.getByRole('link', { name: 'Launch archive Most-loved' });
-    this.launchGuideLink = this.mainNav.getByRole('link', { name: 'Launch Guide Checklists and' });
+    // Items in the Launches hover menu. Their accessible names include a subtitle
+    // ("Launch archive Most-loved launches by the community"), so match only the start
+    // (AGENTS.md rule 11: no marketing copy in locators).
+    this.launchArchiveLink = this.mainNav.getByRole('link', { name: /^Launch archive/i });
+    this.launchGuideLink = this.mainNav.getByRole('link', { name: /^Launch Guide/i });
 
     // A component inside a component: the header owns the search modal.
     // (The old searchInput, `input:not([readonly])`, matched the newsletter email box.)

@@ -23,6 +23,7 @@ class LeaderboardPage extends BasePage {
 
     this.featuredFilter = this.main.getByRole('link', { name: 'Featured', exact: true });
     this.allFilter = this.main.getByRole('link', { name: 'All', exact: true });
+    this.futureDateMessage = page.getByText(/look into the future/i);
   }
 
   /**

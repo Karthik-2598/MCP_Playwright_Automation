@@ -44,13 +44,16 @@ pages/
   BasePage.js           Common page bits; specific pages extend it
   HomePage.js  ProductPage.js  TopicPage.js  SearchResultsPage.js
 graphql/queries.js    GraphQL documents shared across tests
-prompts/              Reusable prompts for AI-assisted exploration
+prompts/              Reusable prompts for MCP exploration and the Test Agents
 docs/mcp-sessions/    MCP review checklist and session logs
+docs/agent-sessions/  Test Agents workflow, healing experiments and session logs
+specs/                Test plans written by the Planner agent
+.github/agents/       Planner, generator and healer agent definitions
 AGENTS.md             Framework rules for AI agents (CLAUDE.md points here)
 schemas/              JSON Schemas for API response contracts
 test-data/            Category rows, mock responses, accessibility baseline
 tests/api/            API tests (project: api)
-tests/e2e/            Browser tests (project: e2e)
+tests/e2e/            Browser tests (project: e2e); seed.spec.js is the agents' starting point
 ```
 
 ### Environment flags
@@ -88,6 +91,19 @@ tests/e2e/            Browser tests (project: e2e)
 - **`prompts/explore-feature.md`** is a reusable 3-phase prompt: explore, propose test ideas, draft.
 - **`docs/mcp-sessions/`** holds the review checklist and one log per session, including what the AI got wrong and how it was fixed.
 
+## Playwright Test Agents
+
+Playwright's built-in planner, generator and healer agents (`.github/agents/`, used from VS Code
+Copilot Chat) run through the `playwright-test` MCP server and start every session from
+`tests/e2e/seed.spec.js`.
+
+- **Planner** explores a feature and writes a plan to `specs/`.
+- **Generator** turns one scenario into a draft test; a human refactors it into page objects.
+- **Healer** fixes failing tests, under extra rules in `AGENTS.md` (fix locators in page
+  objects; never weaken an assertion or skip a test to get green).
+- **`docs/agent-sessions/`** has the healing experiments: one break that should be healed,
+  one that should stay red.
+
 ## Roadmap
 
 - [x] M1: Single runner. API suite moved from bun:test/TS to Playwright `request` in JS
@@ -96,7 +112,7 @@ tests/e2e/            Browser tests (project: e2e)
   - [x] 3A: Tags, JSON schema contracts, GraphQL negative tests
   - [x] 3B: Network mocking, accessibility, data-driven E2E
 - [x] M4: CI with sharding and a published HTML report
-- [ ] M5: Playwright MCP for AI-assisted exploration
+- [x] M5: Playwright MCP for AI-assisted exploration
 - [ ] M6: Playwright Test Agents (planner, generator, healer)
 - [ ] M7: Custom MCP server to run and triage this suite
 - [ ] M8: Docs, architecture diagram, demo

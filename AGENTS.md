@@ -50,6 +50,26 @@ the shortest description of the conventions.
 | GraphQL query for API tests | `graphql/queries.js` |
 | Response contract | `schemas/*.schema.json`, checked with `expect(body).toMatchSchema(schema)` |
 
+## Playwright Test Agents (planner, generator, healer)
+
+- **Seed:** `tests/e2e/seed.spec.js`, project `e2e`. Never create another seed file.
+- **Plans** go in `specs/<feature>.plan.md`.
+- **Generated tests** go in `tests/e2e/generated/` as drafts. A human refactors them into
+  page objects before they join the suite.
+
+### Healing rules
+
+These override the healer's default instructions.
+
+12. **Fix the test, never the evidence.** You may update a locator or an action in `pages/`
+    when the app's markup changed but its behavior did not. Fix it in the page object, not
+    by adding a new locator in the spec.
+13. **Never weaken or delete an assertion, and never add `test.fixme()` / `test.skip()`** to
+    make a test pass. If the app now behaves differently from what the test expects, that
+    may be a product bug: stop, leave the test red, and report what you saw.
+14. **No new waits.** No `waitForTimeout`, no `networkidle`, no bigger timeouts as a fix.
+15. **Run only the file you were asked to heal**, never the whole suite.
+
 ## Before calling a test done
 
 - `npx playwright test <file>` passes locally (E2E needs a residential network; GitHub

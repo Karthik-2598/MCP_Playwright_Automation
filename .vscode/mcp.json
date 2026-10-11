@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.83", "--browser", "chrome",
+               "--test-id-attribute", "data-test", "--caps", "testing",
+               "--output-dir", "mcp-output"]
+    },
+    "playwright-test": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["playwright", "run-test-mcp-server"]
+    }
+  }
+}

@@ -16,7 +16,6 @@ test.describe('Category pages', () => {
 
   test('an unknown category returns a real 404, not an empty 200 page', { tag: ['@regression', '@negative'] }, async ({ topicPage }) => {
     const response = await topicPage.open('this-category-does-not-exist-zzz');
-
     expect(response?.status()).toBe(404);
   });
 });
