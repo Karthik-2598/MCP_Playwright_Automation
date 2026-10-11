@@ -2,7 +2,25 @@
   "name": "playwright-mcp-qa-framework",
   "version": "1.0.0",
   "private": true,
-  "description": "Playwright E2E + GraphQL API test framework for Product Hunt, with MCP integration.",
+  "description": "Playwright (JavaScript) E2E + GraphQL API test framework for Product Hunt, with Playwright MCP exploration and Playwright Test Agents (planner, generator, healer).",
+  "keywords": [
+    "playwright",
+    "e2e",
+    "api-testing",
+    "graphql",
+    "mcp",
+    "test-automation",
+    "page-object-model",
+    "accessibility",
+    "github-actions"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Karthik-2598/MCP_Playwright_Automation.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "test": "playwright test",
     "test:api": "playwright test --project=api",
@@ -13,13 +31,17 @@
     "test:negative": "playwright test --grep @negative",
     "test:mock": "playwright test --grep @mock",
     "test:a11y": "playwright test --grep @a11y",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "test:list": "playwright test --list",
+    "format": "prettier --write \"**/*.{js,json}\"",
+    "format:check": "prettier --check \"**/*.{js,json}\""
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "prettier": "3.3.3"
   }
 }

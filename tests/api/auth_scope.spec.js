@@ -11,15 +11,19 @@ test('a developer token can read viewer-scoped (private) data', { tag: ['@smoke'
   expect(body).toMatchSchema(viewerSchema);
 });
 
-test('an invalid token is rejected with a generic, non-leaking error', { tag: ['@regression', '@negative'] }, async ({ gql }) => {
-  const { status, body } = await gql(VIEWER_ID_QUERY, {}, { token: 'this-is-not-a-real-token' });
+test(
+  'an invalid token is rejected with a generic, non-leaking error',
+  { tag: ['@regression', '@negative'] },
+  async ({ gql }) => {
+    const { status, body } = await gql(VIEWER_ID_QUERY, {}, { token: 'this-is-not-a-real-token' });
 
-  expect(status).toBe(401);
-  expect(body).toMatchSchema(errorSchema);
-  expect(body.data).toBeNull();
-  expect(body.errors?.[0]?.error).toBe('invalid_oauth_token');
+    expect(status).toBe(401);
+    expect(body).toMatchSchema(errorSchema);
+    expect(body.data).toBeNull();
+    expect(body.errors?.[0]?.error).toBe('invalid_oauth_token');
 
-  const raw = JSON.stringify(body);
-  expect(raw).not.toMatch(/\.rb:\d+/);
-  expect(raw).not.toMatch(/traceback|backtrace/i);
-});
+    const raw = JSON.stringify(body);
+    expect(raw).not.toMatch(/\.rb:\d+/);
+    expect(raw).not.toMatch(/traceback|backtrace/i);
+  },
+);

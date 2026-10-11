@@ -1,7 +1,5 @@
 // @ts-check
-const {
-  BasePage
-} = require('./BasePage');
+const { BasePage } = require('./BasePage');
 
 class TopicPage extends BasePage {
   /** @param {string} slug e.g. 'productivity' */
@@ -15,11 +13,11 @@ class TopicPage extends BasePage {
     // "Top reviewed llms", FAQ questions, etc. (strict mode violation).
     return this.page.getByRole('heading', {
       name,
-      level: 1
+      level: 1,
     });
   }
 }
 
 module.exports = {
-  TopicPage
+  TopicPage,
 };

@@ -1,8 +1,6 @@
 // @ts-check
 const { test } = require('@playwright/test');
-const {
-  Header
-} = require('./components/Header');
+const { Header } = require('./components/Header');
 
 // Cloudflare's bot-check page. Shown to data-center IPs (e.g. GitHub Actions runners).
 const BOT_CHALLENGE_TITLE = /^just a moment/i;
@@ -36,14 +34,28 @@ class BasePage {
 
     // Some challenges clear themselves after a few seconds; give it a fair chance.
     await this.page
-      .waitForFunction((src) => !new RegExp(src, 'i').test(document.title), BOT_CHALLENGE_TITLE.source, { timeout: 8_000 })
+      .waitForFunction((src) => !new RegExp(src, 'i').test(document.title), BOT_CHALLENGE_TITLE.source, {
+        timeout: 8_000,
+      })
       .catch(() => {});
 
     if (BOT_CHALLENGE_TITLE.test(await this.page.title())) {
-      test.info().annotations.push({ type: 'environment', description: 'Cloudflare bot challenge served to this machine' });
-      test.skip(true, 'Blocked by Cloudflare bot challenge ("Just a moment..."): the live site cannot be tested from this machine');
+      test
+        .info()
+        .annotations.push({ type: 'environment', description: 'Cloudflare bot challenge served to this machine' });
+      test.skip(
+        true,
+        'Blocked by Cloudflare bot challenge ("Just a moment..."): the live site cannot be tested from this machine',
+      );
     }
   }
+
+  /**
+   * Product Hunt sometimes serves its Markdown "for AI agents" version of a page to a normal
+   * browser (cached at Cloudflare; `Vary` does not include `Accept`). There is no UI to test
+   * then, so SKIP with the reason instead of failing on a missing element.
+   * @param {import('@playwright/test').Response | null} response
+   */
   skipIfNotHtml(response) {
     const type = response?.headers()['content-type'] ?? '';
     if (!type || type.includes('text/html')) return;
@@ -53,9 +65,8 @@ class BasePage {
     });
     test.skip(true, `Site served ${type} instead of HTML`);
   }
-  
 }
 
 module.exports = {
-  BasePage
+  BasePage,
 };

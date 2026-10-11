@@ -52,8 +52,10 @@ async function mockGraphQLOperation(page, operationName, handler) {
 }
 
 /** Shorthand: answer an operation with a fixed JSON body. */
-const respondWith = (/** @type {object} */ body, status = 200) =>
+const respondWith =
+  (/** @type {object} */ body, status = 200) =>
   /** @param {{ route: import('@playwright/test').Route }} ctx */
-  ({ route }) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
+  ({ route }) =>
+    route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
 
 module.exports = { mockGraphQLOperation, respondWith, operationNameOf };

@@ -46,7 +46,7 @@ test.describe('Accessibility', { tag: ['@regression', '@a11y'] }, () => {
 
       expect(
         newOnes.map((v) => `${v.impact}: ${v.id} on ${v.nodes.length} element(s). ${v.help}`),
-        'new accessibility violations (not in test-data/a11y-baseline.json)'
+        'new accessibility violations (not in test-data/a11y-baseline.json)',
       ).toEqual([]);
     });
   }

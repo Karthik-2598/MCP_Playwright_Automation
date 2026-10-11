@@ -27,7 +27,9 @@ const matchers = {
       : () =>
           `Response does not match "${name}":\n` +
           (validate.errors ?? [])
-            .map((e) => `  - ${e.instancePath || '(root)'} ${e.message}${e.params ? ` ${JSON.stringify(e.params)}` : ''}`)
+            .map(
+              (e) => `  - ${e.instancePath || '(root)'} ${e.message}${e.params ? ` ${JSON.stringify(e.params)}` : ''}`,
+            )
             .join('\n');
     return { pass, message, name: 'toMatchSchema' };
   },

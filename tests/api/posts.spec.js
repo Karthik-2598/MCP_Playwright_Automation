@@ -1,21 +1,11 @@
 // @ts-check
-const {
-  test,
-  expect
-} = require('../../fixtures');
-const {
-  POSTS_QUERY
-} = require('../../graphql/queries');
+const { test, expect } = require('../../fixtures');
+const { POSTS_QUERY } = require('../../graphql/queries');
 const postsSchema = require('../../schemas/posts.schema.json');
 
-test('posts(first:N) returns exactly N posts with expected shape', { tag: ['@smoke'] }, async ({
-  gql
-}) => {
-  const {
-    status,
-    body
-  } = await gql(POSTS_QUERY, {
-    first: 5
+test('posts(first:N) returns exactly N posts with expected shape', { tag: ['@smoke'] }, async ({ gql }) => {
+  const { status, body } = await gql(POSTS_QUERY, {
+    first: 5,
   });
 
   expect(status).toBe(200);

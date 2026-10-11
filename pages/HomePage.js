@@ -6,6 +6,8 @@ class HomePage extends BasePage {
   constructor(page) {
     super(page);
 
+    // Product cards have no stable role/name (the name is live data), so match on the
+    // URL shape. An href is a stable contract; generated CSS class names are not.
     this.productCards = page.locator('a[href*="/products/"]');
     this.upvoteButton = page
       .getByRole('button', { name: /^upvote/i })

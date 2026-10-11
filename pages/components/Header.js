@@ -1,15 +1,16 @@
 // @ts-check
 const { SpotlightSearch } = require('./SpotlightSearch');
-//this appears in every test file, so we put it as a shared fixture component.
+
+/**
+ * The site header, present on every page. A component (not a page): every page object
+ * gets one through BasePage, so specs write `homePage.header.search('notion')`.
+ */
 class Header {
   /** @param {import('@playwright/test').Page} page */
   constructor(page) {
     this.page = page;
 
-    this.navLinks = page
-      .getByRole('banner')
-      .getByRole('link')
-      .or(page.locator('header').getByRole('link'));
+    this.navLinks = page.getByRole('banner').getByRole('link').or(page.locator('header').getByRole('link'));
 
     // Desktop main nav (seen at 1280x720). On narrower screens these links move to a
     // left sidebar ("Homepage navigation") and this nav is not rendered.
@@ -50,12 +51,12 @@ class Header {
   /** Internal (same-site) hrefs from the header, de-duplicated. */
   async internalNavHrefs() {
     const hrefs = await this.navLinks.evaluateAll((els) =>
-      els.map((el) => el.getAttribute('href')).filter((href) => href && href.startsWith('/'))
+      els.map((el) => el.getAttribute('href')).filter((href) => href && href.startsWith('/')),
     );
     return [...new Set(hrefs)];
   }
 }
 
 module.exports = {
-  Header
+  Header,
 };

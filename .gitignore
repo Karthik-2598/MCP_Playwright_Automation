@@ -7,3 +7,5 @@ results/
 playwright/.cache/
 *.log
 mcp-output/
+.DS_Store
+*.diff

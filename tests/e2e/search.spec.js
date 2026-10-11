@@ -7,23 +7,31 @@ const { SearchResultsPage } = require('../../pages/SearchResultsPage');
 // homepage already contains that word, so the test could pass without searching.
 // These versions assert on search-specific elements only.
 test.describe('Search (live)', () => {
-  test('submitting a known term opens a results page with matching products', { tag: ['@smoke'] }, async ({ homePage, searchResultsPage, page }) => {
-    await homePage.open();
-    await homePage.header.search('notion');
+  test(
+    'submitting a known term opens a results page with matching products',
+    { tag: ['@smoke'] },
+    async ({ homePage, searchResultsPage, page }) => {
+      await homePage.open();
+      await homePage.header.search('notion');
 
-    // Not just /search?q= : the first live run proved an EMPTY query also matches that.
-    await expect(page).toHaveURL(/\/search\?q=notion/);
-    await expect(searchResultsPage.productResultsMatching('notion').first()).toBeVisible();
-  });
+      // Not just /search?q= : the first live run proved an EMPTY query also matches that.
+      await expect(page).toHaveURL(/\/search\?q=notion/);
+      await expect(searchResultsPage.productResultsMatching('notion').first()).toBeVisible();
+    },
+  );
 
-  test('typing shows live suggestions without leaving the page', { tag: ['@regression'] }, async ({ homePage, page }) => {
-    await homePage.open();
-    const { spotlight } = homePage.header;
+  test(
+    'typing shows live suggestions without leaving the page',
+    { tag: ['@regression'] },
+    async ({ homePage, page }) => {
+      await homePage.open();
+      const { spotlight } = homePage.header;
 
-    await spotlight.open();
-    await spotlight.type('notion');
+      await spotlight.open();
+      await spotlight.type('notion');
 
-    await expect(spotlight.productResults.first()).toBeVisible();
-    await expect(page).not.toHaveURL(SearchResultsPage.URL_PATTERN);
-  });
+      await expect(spotlight.productResults.first()).toBeVisible();
+      await expect(page).not.toHaveURL(SearchResultsPage.URL_PATTERN);
+    },
+  );
 });

@@ -16,11 +16,18 @@ class LeaderboardPage extends BasePage {
     // At 1280px the date part is plain text; on narrower screens it is a date textbox.
     this.title = page.getByTestId('leaderboard-title');
 
-    // Product links use bare product-name labels, unlike the day-picker links.
-    this.productLinks = this.main.locator('a[href^="/products/"]');
+    // Ranked product rows link their name as "1. Name", "2. Name", ...
+    // The day-picker links are bare numbers ("1", "2") and the year links are "2025",
+    // so the "<number>. " prefix keeps them out. (The healer twice replaced this with a
+    // looser CSS selector, claiming the prefix was gone. It wasn't: see
+    // docs/agent-sessions/2026-10-leaderboard-agents.md.)
+    this.productLinks = this.main.getByRole('link', { name: /^\d+\. / });
 
     this.featuredFilter = this.main.getByRole('link', { name: 'Featured', exact: true });
     this.allFilter = this.main.getByRole('link', { name: 'All', exact: true });
+
+    // Shown instead of the product list for a date that hasn't happened yet:
+    // "You seem to want to look into the future, sadly we cannot. Come back in 29 days."
     this.futureDateMessage = page.getByText(/look into the future/i);
   }
 

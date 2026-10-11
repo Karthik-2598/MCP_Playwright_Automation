@@ -39,27 +39,34 @@ test.describe('Search UI with a mocked API', { tag: ['@regression', '@mock'] }, 
     await expect(spotlight.results).toHaveCount(0);
   });
 
-  test('survives a failing search API without crashing', { tag: ['@negative'] }, async ({ homePage, mockGraphQL, page }, testInfo) => {
-    await mockGraphQL(SEARCH_OP, respondWith({ errors: [{ message: 'Internal server error' }] }, 500));
-    const pageErrors = [];
-    page.on('pageerror', (err) => pageErrors.push(err.message));
-    const { spotlight } = homePage.header;
+  test(
+    'survives a failing search API without crashing',
+    { tag: ['@negative'] },
+    async ({ homePage, mockGraphQL, page }, testInfo) => {
+      await mockGraphQL(SEARCH_OP, respondWith({ errors: [{ message: 'Internal server error' }] }, 500));
+      const pageErrors = [];
+      page.on('pageerror', (err) => pageErrors.push(err.message));
+      const { spotlight } = homePage.header;
 
-    const failedSearch = page.waitForResponse((r) => r.url().includes(SEARCH_OP) && r.status() === 500);
-    await spotlight.type('notion');
-    await failedSearch; // our fake failure has definitely reached the page
-    await page.waitForTimeout(1_000); // give a crash time to surface; no event exists for "nothing happened"
+      const failedSearch = page.waitForResponse((r) => r.url().includes(SEARCH_OP) && r.status() === 500);
+      await spotlight.type('notion');
+      await failedSearch; // our fake failure has definitely reached the page
+      await page.waitForTimeout(1_000); // give a crash time to surface; no event exists for "nothing happened"
 
-    await expect(spotlight.input, 'search box should still be usable').toBeEditable();
-    await expect(spotlight.productResults).toHaveCount(0);
+      await expect(spotlight.input, 'search box should still be usable').toBeEditable();
+      await expect(spotlight.productResults).toHaveCount(0);
 
-    // React #418 (hydration mismatch) is a pre-existing Product Hunt bug: the trace showed
-    // it firing BEFORE our mocked 500 arrived. Record it as a finding, don't blame search.
-    const known = pageErrors.filter((m) => KNOWN_SITE_ERRORS.test(m));
-    const unexpected = pageErrors.filter((m) => !KNOWN_SITE_ERRORS.test(m));
-    if (known.length) {
-      testInfo.annotations.push({ type: 'site finding', description: `React hydration error seen ${known.length}x (pre-existing, not caused by search)` });
-    }
-    expect(unexpected, 'uncaught JavaScript errors caused by the failing search').toEqual([]);
-  });
+      // React #418 (hydration mismatch) is a pre-existing Product Hunt bug: the trace showed
+      // it firing BEFORE our mocked 500 arrived. Record it as a finding, don't blame search.
+      const known = pageErrors.filter((m) => KNOWN_SITE_ERRORS.test(m));
+      const unexpected = pageErrors.filter((m) => !KNOWN_SITE_ERRORS.test(m));
+      if (known.length) {
+        testInfo.annotations.push({
+          type: 'site finding',
+          description: `React hydration error seen ${known.length}x (pre-existing, not caused by search)`,
+        });
+      }
+      expect(unexpected, 'uncaught JavaScript errors caused by the failing search').toEqual([]);
+    },
+  );
 });

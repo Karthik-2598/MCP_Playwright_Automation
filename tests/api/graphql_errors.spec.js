@@ -18,9 +18,7 @@ test.describe('GraphQL error handling', { tag: ['@regression', '@negative'] }, (
   });
 
   test('querying a field that does not exist names the bad field in the error', async ({ gql }) => {
-    const { status, body } = await gql(
-      'query { posts(first: 1) { edges { node { id thisFieldDoesNotExist } } } }'
-    );
+    const { status, body } = await gql('query { posts(first: 1) { edges { node { id thisFieldDoesNotExist } } } }');
 
     expect(status).toBeLessThan(500);
     expect(body).toMatchSchema(errorSchema);
