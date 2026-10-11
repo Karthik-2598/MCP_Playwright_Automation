@@ -16,10 +16,8 @@ class LeaderboardPage extends BasePage {
     // At 1280px the date part is plain text; on narrower screens it is a date textbox.
     this.title = page.getByTestId('leaderboard-title');
 
-    // Product rows link their name as "1. Name", "2. Name", ...
-    // The day-picker links are bare numbers ("1", "2") and the year links are "2025",
-    // so the "<number>. " prefix keeps them out.
-    this.productLinks = this.main.getByRole('link', { name: /^\d+\. / });
+    // Product links use bare product-name labels, unlike the day-picker links.
+    this.productLinks = this.main.locator('a[href^="/products/"]');
 
     this.featuredFilter = this.main.getByRole('link', { name: 'Featured', exact: true });
     this.allFilter = this.main.getByRole('link', { name: 'All', exact: true });

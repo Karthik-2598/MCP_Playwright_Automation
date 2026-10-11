@@ -69,6 +69,8 @@ These override the healer's default instructions.
     may be a product bug: stop, leave the test red, and report what you saw.
 14. **No new waits.** No `waitForTimeout`, no `networkidle`, no bigger timeouts as a fix.
 15. **Run only the file you were asked to heal**, never the whole suite.
+16. **Change only what the failure points at.** Don't "improve" other locators in the same
+    file. If you think something else is broken, say so in the report instead of editing it.
 
 ## Before calling a test done
 

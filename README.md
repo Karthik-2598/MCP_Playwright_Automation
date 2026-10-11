@@ -102,7 +102,7 @@ Copilot Chat) run through the `playwright-test` MCP server and start every sessi
 - **Healer** fixes failing tests, under extra rules in `AGENTS.md` (fix locators in page
   objects; never weaken an assertion or skip a test to get green).
 - **`docs/agent-sessions/`** has the healing experiments: one break that should be healed,
-  one that should stay red.
+  one that should stay red, and a real flake. Results: [2026-10-leaderboard-agents.md](docs/agent-sessions/2026-10-leaderboard-agents.md).
 
 ## Roadmap
 
@@ -113,6 +113,6 @@ Copilot Chat) run through the `playwright-test` MCP server and start every sessi
   - [x] 3B: Network mocking, accessibility, data-driven E2E
 - [x] M4: CI with sharding and a published HTML report
 - [x] M5: Playwright MCP for AI-assisted exploration
-- [ ] M6: Playwright Test Agents (planner, generator, healer)
+- [x] M6: Playwright Test Agents (planner, generator, healer)
 - [ ] M7: Custom MCP server to run and triage this suite
 - [ ] M8: Docs, architecture diagram, demo
