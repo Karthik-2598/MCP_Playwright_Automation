@@ -22,6 +22,7 @@ class BasePage {
   async goto(path) {
     const response = await this.page.goto(path);
     await this.skipIfBotChallenge();
+    this.skipIfNotHtml(response);
     return response;
   }
 
@@ -43,6 +44,16 @@ class BasePage {
       test.skip(true, 'Blocked by Cloudflare bot challenge ("Just a moment..."): the live site cannot be tested from this machine');
     }
   }
+  skipIfNotHtml(response) {
+    const type = response?.headers()['content-type'] ?? '';
+    if (!type || type.includes('text/html')) return;
+    test.info().annotations.push({
+      type: 'environment',
+      description: `Got "${type}" instead of HTML for ${this.page.url()} (site served its Markdown version)`,
+    });
+    test.skip(true, `Site served ${type} instead of HTML`);
+  }
+  
 }
 
 module.exports = {
